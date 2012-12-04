@@ -35,6 +35,7 @@ int main(void)
     uint16_t set_temp = 110.0;
     uint8_t element_on = 0;
     char display_str[255] = {0};
+    char prev_display_str[255] = {0};
 
     while(1)
     {
@@ -48,9 +49,12 @@ int main(void)
         uint16_t disp_temp = (int)round(current_temp);
         char *element_status = (element_on == 1) ? "ON": "OFF";
         sprintf(display_str,"Current: %d\nSet: %d  Element: %s", disp_temp, set_temp, element_status);
-        lcd_clrscr();
-        lcd_home();
-        lcd_string(display_str);
+        if (strcmp(display_str, prev_display_str) != 0)
+        {
+            lcd_clrscr();
+            lcd_string(display_str);
+            strcpy(prev_display_str, display_str);
+        }
 
         _delay_us(1000000);
     }
